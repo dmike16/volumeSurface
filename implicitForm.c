@@ -7,7 +7,7 @@
 
 
 static void
-*ImplicitSurface_ctor(void *_self,va_list *app){
+*ImplicitForm_ctor(void *_self,va_list *app){
   struct __ImplicitForm *self = super_ctor(ImplicitForm,_self,app);
 
   typedef void* voidstar;
@@ -16,6 +16,16 @@ static void
   self->level = va_arg(*app,dprecision);
   self->u = (levelSet)respondsTo(self->delegate,"surface");
   self->vol = (volM)respondsTo(self->delegate,"volume");
+
+  return self;
+}
+
+static void
+*ImplicitForm_dtor (void *_self)
+{
+  struct __ImplicitForm *self = super_dtor(ImplicitForm,_self);
+
+  free(dtor(self->delegate));
 
   return self;
 }
@@ -32,6 +42,7 @@ const void *_ImplicitForm;
 const void
 *__implicitform(){
   return new(Class,"ImplicitSurface",Object,sizeof(struct __ImplicitForm),
-             ctor,"",ImplicitSurface_ctor,
+             ctor,"",ImplicitForm_ctor,
+             dtor,"",ImplicitForm_dtor,
              (void*)0);
 }

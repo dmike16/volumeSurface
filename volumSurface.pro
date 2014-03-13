@@ -4,7 +4,7 @@ CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
 
-DEFINES += MEMTRACE
+#DEFINES += MEMTRACE
 SOURCES += main.c \
     surface.c \
     surfacesphere.c \

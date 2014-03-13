@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include <malloc.h>
 #include "surface.r"
 #include "surface.h"
 
@@ -11,6 +12,16 @@ static void
   typedef void* voidstar;
   self->delegate = va_arg(*app,voidstar);
   self->point = (pointM) respondsTo(self->delegate,"point");
+
+  return self;
+}
+
+static void
+*Surface_dtor (void *_self)
+{
+  struct __Surface *self = super_dtor(Surface,_self);
+
+  free(dtor(self->delegate));
 
   return self;
 }
@@ -66,5 +77,6 @@ const void*
 __surface(){
   return new(SurfaceClass,"Surface",Object,sizeof(struct __Surface),
              ctor,"",Surface_ctor,
+             dtor,"",Surface_dtor,
              (void*)0);
 }
