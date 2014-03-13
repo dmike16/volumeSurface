@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <math.h>
+#include <malloc.h>
+#include <stdarg.h>
+#include "implicitForm.r"
+#include "implicitForm.h"
+
+
+static void
+*ImplicitSurface_ctor(void *_self,va_list *app){
+  struct __ImplicitForm *self = super_ctor(ImplicitForm,_self,app);
+
+  typedef void* voidstar;
+  typedef double dprecision;
+  self->delegate = va_arg(*app,voidstar);
+  self->level = va_arg(*app,dprecision);
+  self->u = (levelSet)respondsTo(self->delegate,"surface");
+  self->vol = (volM)respondsTo(self->delegate,"volume");
+
+  return self;
+}
+
+float
+u_surface(const void *_self, const float *x){
+  struct __ImplicitForm *self = cast(Object,_self);
+
+  return self->u(self->delegate,x);
+}
+
+const void *_ImplicitForm;
+
+const void
+*__implicitform(){
+  return new(Class,"ImplicitSurface",Object,sizeof(struct __ImplicitForm),
+             ctor,"",ImplicitSurface_ctor,
+             (void*)0);
+}
