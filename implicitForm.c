@@ -37,6 +37,13 @@ u_surface(const void *_self, const float *x){
   return self->u(self->delegate,x);
 }
 
+float
+u_vol(const void *_self){
+  struct __ImplicitForm *self = cast(Object,_self);
+
+  return self->vol(self->delegate,self);
+}
+
 const void *_ImplicitForm;
 
 const void

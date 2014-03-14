@@ -9,7 +9,7 @@ extern const void *_Surface;
 #define Surface (_Surface ? _Surface : (_Surface = __surface()))
 
 float surface(const void *self, const float *x);
-float volume(const void *self, const void *implicitSurf,const float *Omega, float step);
+float volume(const void *self, const void *implicitSurf);
 const void *__surfaceclass();
 const void *__surface();
 

@@ -11,7 +11,7 @@ int main(void)
   mtrace();
 #endif
   // This main is only for test i'll change it
-  float x[] ={0.4f,0.6f,0.3f};
+  float x[] ={0.0f,0.0f,0.0f};
   float **omega = malloc(sizeof(float*)*3);
   int i;
   for(i=0; i<3; i++){
@@ -19,12 +19,11 @@ int main(void)
     omega[i][0]=-3.00f;
     omega[i][1]=3.00f;
     }
-  printf("Hello World!\n");
   void *surf = new(ImplicitForm,
                    new(SurfaceSphere,
-                       new(Grid,3,100,omega),3,1.00f),0.5);
-  printf("Il valore della superfici nel punto %.2f,%.2f,%.2f è %.2f\n",
-         0.4f,0.6f,0.3f,u_surface(surf,x));
+                       new(Grid,3,300,omega),3,1.00f),0.3f);
+  printf("S(%.2f,%.2f,%.2f) = %.2f\n",0.0f,0.0f,0.0f,u_surface(surf,x));
+  printf("vol(S) = %.2f\n",u_vol(surf));
   delete(surf);
   for(i=0; i<3; i++)
     free(omega[i]);
