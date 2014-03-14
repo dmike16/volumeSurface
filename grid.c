@@ -17,24 +17,19 @@ static void
   self->steps = va_arg(*app,integer);
   float **Omega = va_arg(*app,floatstarstar);
 
-  float *deltax = malloc(sizeof(float)*self->dim);
   register int i,j;
 
-  assert(deltax);
-
-
+  self->delatax = malloc(sizeof(float)*self->dim);
   self->axes = malloc(sizeof(float*)*self->dim);
   assert(self->axes);
 
   for(i = 0; i < self->dim; i++){
-    deltax[i] = fabs(Omega[i][1] - Omega[i][0])/self->steps;
+      self->delatax[i]=fabs(Omega[i][1]-Omega[i][0])/(self->steps-1.00f);
     self->axes[i] = malloc(sizeof(float)*self->steps);
     assert(self->axes[i]);
     for(j = 0; j < self->steps; j++)
-      self->axes[i][j] = Omega[i][0] + j*deltax[i];
+      self->axes[i][j] = Omega[i][0] + j*self->delatax[i];
     }
-
-  free(deltax);
 
   return self;
 }
@@ -50,6 +45,7 @@ static void
       free(self->axes[i]);
     }
   free(self->axes);
+  free(self->delatax);
 
   return self;
 }
