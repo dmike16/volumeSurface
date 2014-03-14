@@ -93,7 +93,7 @@ drivers-y	:= #ic/
 
 volume-dirs	:= $(patsubst %/,%,$(filter %/,$(init-y) \
 			$(core-y) $(libs-y) $(drivers-y)))
-volume-alldirs := $(sort $(pvschema-dirs))
+volume-alldirs := $(sort $(volume-dirs))
 
 init-y		:= $(patsubst %/, %/built-in.o, $(init-y))
 core-y		:= $(patsubst %/, %/built-in.o, $(core-y))
