@@ -7,8 +7,12 @@ struct __Grid {
   struct __Object _;
   int dim;
   int steps;
+  float *delatax;
   float **axes;
 };
+
+#define Deltax(x) (((const struct __Grid *) (x)) ->delatax[0])
+#define Steps(x) (((const struct __Grid *) (x)) ->steps)
 
 struct __GridClass {
   struct __Class _;

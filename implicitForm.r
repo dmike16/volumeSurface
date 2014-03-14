@@ -4,7 +4,7 @@
 #include "Object.r"
 
 typedef float (*levelSet)(const void*,const float*);
-typedef float (*volM)(const void*,const void*,const float*,float);
+typedef float (*volM)(const void*,const void*);
 
 struct __ImplicitForm {
   struct __Object _;
