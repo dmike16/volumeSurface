@@ -11,6 +11,9 @@ struct __Surface {
   pointM point;
 };
 
+#define Delegate(x) (((const struct __Surface *) (x))->delegate)
+#define Point(x) (((const struct __Surface *) (x))->point)
+
 struct __SurfaceClass{
   struct __Class _;
   struct Method surface;
