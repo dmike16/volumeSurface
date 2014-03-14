@@ -63,7 +63,6 @@ SurfaceSphere_volume(const void *_self,const void *_implicitSurf){
   int steps = Steps(Delegate(self));
   int gSize = (int)powf(steps,self->space);
   float vol = 0.0f;
-  float val;
   register int i,flag;
   float *x = malloc(sizeof(float)*self->space);
   int *index = calloc(1,sizeof(int)*self->space);
@@ -75,9 +74,7 @@ SurfaceSphere_volume(const void *_self,const void *_implicitSurf){
          impSurf->level,self->radius,deltax,epsilon);
   for(i = 0; i < gSize; i++){
       x = Point(self)(Delegate(self),index,x);
-      val=(impSurf->u)(self,x);
-      if(val != 0.0f)
-          vol += (1-heaviSide((val-impSurf->level),epsilon));
+      vol += (1-heaviSide((impSurf->level-(impSurf->u)(self,x)),epsilon));
 
       for(flag = 0; flag < self->space; flag++)
             if(index[flag] == steps-1)
@@ -92,6 +89,18 @@ SurfaceSphere_volume(const void *_self,const void *_implicitSurf){
 
   return vol*powf(deltax,self->space);
 }
+
+static float
+SurfaceSphere_volError(const void* _self, const float vol, const float level){
+  struct __SurfaceSphere *self = cast(SurfaceSphere,_self);
+
+  register int i;
+  float r_zero = sqrt((self->radius) - level);
+  float vol_exact = (4.00f/3.00f)*PI*powf(r_zero,self->space);
+
+  return fabs(vol_exact - vol);
+}
+
 
 float
 surface(const void *_self,const  float *x){
@@ -113,6 +122,16 @@ volume(const void *_self, const void *implicitSurf){
   return ((volM)self->volume.method)(_self,implicitSurf);
 }
 
+float
+volError(const void *_self, const float vol, const float level){
+  struct __SurfaceClass *self = cast(SurfaceClass,classOf(_self));
+
+  assert((volerrM) volError == volError);
+  assert(self->volError.method);
+
+  return ((volerrM)self->volError.method)(_self,vol,level);
+}
+
 const void* _SurfaceSphere;
 
 const void
@@ -121,5 +140,6 @@ const void
              ctor,"",SurfaceSphere_ctor,
              surface,"surface",SurfaceSphere_surface,
              volume,"volume",SurfaceSphere_volume,
+             volError,"volerror",SurfaceSphere_volError,
              (void*)0);
 }

@@ -21,9 +21,11 @@ int main(void)
     }
   void *surf = new(ImplicitForm,
                    new(SurfaceSphere,
-                       new(Grid,3,300,omega),3,1.00f),0.3f);
-  printf("S(%.2f,%.2f,%.2f) = %.2f\n",0.0f,0.0f,0.0f,u_surface(surf,x));
-  printf("vol(S) = %.2f\n",u_vol(surf));
+                       new(Grid,3,100,omega),3,1.00f),0.5f);
+  printf("S(%.2f,%.2f,%.2f) = %.2f\n",0.0f,0.0f,0.0f,uSurface(surf,x));
+  float vol = uVol(surf);
+  printf("vol(S) = %.2f\n",vol);
+  printf(" ||Error Volume||= %.2e \n",uVolError(surf,vol));
   delete(surf);
   for(i=0; i<3; i++)
     free(omega[i]);

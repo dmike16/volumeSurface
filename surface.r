@@ -18,6 +18,7 @@ struct __SurfaceClass{
   struct __Class _;
   struct Method surface;
   struct Method volume;
+  struct Method volError;
 };
 
 #endif // SURFACE_R

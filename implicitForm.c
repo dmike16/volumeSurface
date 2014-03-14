@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 #include <math.h>
 #include <malloc.h>
 #include <stdarg.h>
@@ -16,6 +19,7 @@ static void
   self->level = va_arg(*app,dprecision);
   self->u = (levelSet)respondsTo(self->delegate,"surface");
   self->vol = (volM)respondsTo(self->delegate,"volume");
+  self->volErr = (volerrM)respondsTo(self->delegate,"volerror");
 
   return self;
 }
@@ -31,17 +35,41 @@ static void
 }
 
 float
-u_surface(const void *_self, const float *x){
+uSurface(const void *_self, const float *x){
   struct __ImplicitForm *self = cast(Object,_self);
 
-  return self->u(self->delegate,x);
+  if(self->u)
+    return self->u(self->delegate,x);
+  else {
+      fprintf(stderr,"Error in find delegate implicit fuction definition: %s\n",strerror(errno));
+      exit(1);
+    }
 }
 
 float
-u_vol(const void *_self){
+uVol(const void *_self){
   struct __ImplicitForm *self = cast(Object,_self);
+  if(self->vol)
+    return self->vol(self->delegate,self);
+  else {
+      printf("### WARNING ###\n");
+      printf("\t Method Volume not supported for this Oject\n");
+      return -1.00f;
+    }
 
-  return self->vol(self->delegate,self);
+}
+
+float
+uVolError(const void *_self,const float vol){
+  struct __ImplicitForm *self = cast(Object,_self);
+  if(self->volErr)
+    return self->volErr(self->delegate,vol,self->level);
+  else {
+      printf("### WARNING ###\n");
+      printf("\t Method Error Volume not supported for this Oject\n");
+      return -1.00f;
+    }
+
 }
 
 const void *_ImplicitForm;

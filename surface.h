@@ -10,6 +10,7 @@ extern const void *_Surface;
 
 float surface(const void *self, const float *x);
 float volume(const void *self, const void *implicitSurf);
+float volError(const void *self, const float vol, const float level);
 const void *__surfaceclass();
 const void *__surface();
 

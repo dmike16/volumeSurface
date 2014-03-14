@@ -57,6 +57,14 @@ static void
           self->volume.method = method;
           continue;
         }
+// Install error method
+      if(selector == (Method) volError){
+          if(tag)
+            self->volError.tag = tag;
+          self->volError.selector = selector;
+          self->volError.method = method;
+          continue;
+        }
     }
 
   va_end(ap);
