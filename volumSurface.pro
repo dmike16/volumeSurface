@@ -5,26 +5,27 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 #DEFINES += MEMTRACE
-SOURCES += main.c \
-    surface.c \
-    surfacesphere.c \
-    implicitForm.c \
-    grid.c
-
+SOURCES += \
+    init/main.c \
+    class/grid/grid.c \
+    class/implicitForm/implicitForm.c \
+    class/surface/surface.c \
+    class/surface/surfaceSphere/surfacesphere.c
 LIBS += -lm
-unix:!macx: LIBS += -L$$PWD/../../lib-ooc/build-libooc-Desktop-Debug/ -llibooc
-
-INCLUDEPATH += $$PWD/../../lib-ooc/libooc/include
-DEPENDPATH += $$PWD/../../lib-ooc/libooc/include
-
-unix:!macx: PRE_TARGETDEPS += $$PWD/../../lib-ooc/build-libooc-Desktop-Debug/liblibooc.a
-
+INCLUDEPATH += ./include
 HEADERS += \
-    surface.h \
-    surface.r \
-    surfaceSphere.h \
-    surfaceSphere.r \
-    implicitForm.h \
-    implicitForm.r \
-    grid.r \
-    grid.h
+    include/surfaceSphere.r \
+    include/surfaceSphere.h \
+    include/surface.r \
+    include/surface.h \
+    include/implicitForm.r \
+    include/implicitForm.h \
+    include/grid.r \
+    include/grid.h
+
+unix:!macx: LIBS += -L$$PWD/lib/ -llibooc
+
+INCLUDEPATH += $$PWD/lib/include
+DEPENDPATH += $$PWD/lib/include
+
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/liblibooc.a
