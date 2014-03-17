@@ -1,3 +1,3 @@
-obj-y	+= surface.o surfaceSphere/ surfaceTorus/
+obj-y += surfaceTorus.o
 clean-files := *~ *.o *.d
 cflags-y += -I$(srctree)/lib/include
