@@ -28,7 +28,7 @@ SurfaceTorus_surface(const void* _self, const float *x){
   struct __SurfaceTorus *self = cast(SurfaceTorus,_self);
 
   register int i;
-  float u_xy = 0.00f, u_z;
+  float u_xy = 0.00f, u_z = 0.00f;
   float r_two = (self->r)*(self->r);
 
     for (i = 0; i < Dim(self); i++){
