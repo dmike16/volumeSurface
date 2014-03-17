@@ -3,6 +3,7 @@
 #include <mcheck.h>
 #include "implicitForm.h"
 #include "surfaceSphere.h"
+#include "surfaceTorus.h"
 #include "grid.h"
 
 int main(void)
@@ -11,7 +12,6 @@ int main(void)
   mtrace();
 #endif
   // This main is only for test i'll change it
-  float x[] ={0.0f,0.0f,0.0f};
   float **omega = malloc(sizeof(float*)*3);
   int i;
   for(i=0; i<3; i++){
@@ -19,14 +19,21 @@ int main(void)
     omega[i][0]=-3.00f;
     omega[i][1]=3.00f;
     }
-  void *surf = new(ImplicitForm,
-                   new(SurfaceSphere,
-                       new(Grid,3,100,omega),3,1.00f),0.5f);
-  printf("S(%.2f,%.2f,%.2f) = %.2f\n",0.0f,0.0f,0.0f,uSurface(surf,x));
-  float vol = uVol(surf);
-  printf("vol(S) = %.2f\n",vol);
-  printf(" ||Error Volume||= %.2e \n",uVolError(surf,vol));
-  delete(surf);
+  void *surf_toro = new(ImplicitForm,
+                   new(SurfaceTorus,
+                       new(Grid,3,100,omega),3,0.3,0.5f),0.0f);
+  float vol = uVol(surf_toro);
+  printf("vol(S) = %.4f\n",vol);
+  printf(" ||Error Volume||= %.2e \n",uVolError(surf_toro,vol));
+  delete(surf_toro);
+  void *surf_s = new(ImplicitForm,
+                     new(SurfaceSphere,
+                       new(Grid,3,100,omega),3,1.0f),0.5f);
+
+  vol = uVol(surf_s);
+  printf("vol(S) = %.4f\n",vol);
+  printf(" ||Error Volume||= %.2e \n",uVolError(surf_s,vol));
+  delete(surf_s);
   for(i=0; i<3; i++)
     free(omega[i]);
   free(omega);

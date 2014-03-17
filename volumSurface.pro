@@ -10,7 +10,8 @@ SOURCES += \
     class/grid/grid.c \
     class/implicitForm/implicitForm.c \
     class/surface/surface.c \
-    class/surface/surfaceSphere/surfacesphere.c
+    class/surface/surfaceSphere/surfacesphere.c \
+    class/surface/surfaceTorus/surfaceTorus.c
 LIBS += -lm
 INCLUDEPATH += ./include
 HEADERS += \
@@ -21,11 +22,14 @@ HEADERS += \
     include/implicitForm.r \
     include/implicitForm.h \
     include/grid.r \
-    include/grid.h
+    include/grid.h \
+    include/surfaceTorus.r \
+    include/surfaceTorus.h
 
-unix:!macx: LIBS += -L$$PWD/lib/ -llibooc
+
+unix:!macx: LIBS += -L$$PWD/lib/ -looc
 
 INCLUDEPATH += $$PWD/lib/include
 DEPENDPATH += $$PWD/lib/include
 
-unix:!macx: PRE_TARGETDEPS += $$PWD/lib/liblibooc.a
+unix:!macx: PRE_TARGETDEPS += $$PWD/lib/libooc.a
