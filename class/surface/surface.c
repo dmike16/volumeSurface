@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <malloc.h>
+#include <assert.h>
+#include <math.h>
 #include "surface.r"
+#include "implicitForm.r"
+#include "grid.r"
 #include "surface.h"
 
 
@@ -9,8 +13,10 @@ static void
 *Surface_ctor(void *_self, va_list *app){
   struct __Surface *self = super_ctor(Surface,_self,app);
 
+  typedef int integer;
   typedef void* voidstar;
   self->delegate = va_arg(*app,voidstar);
+  self->space = va_arg(*app,integer);
   self->point = (pointM) respondsTo(self->delegate,"point");
 
   return self;
@@ -25,6 +31,44 @@ static void
 
   return self;
 }
+
+static float
+Surface_volume(const void *_self,const void *_implicitSurf){
+
+  struct __Surface *self = cast(Surface,_self);
+  struct __ImplicitForm *impSurf = cast(Object,_implicitSurf);
+
+  float deltax = Deltax(self->delegate);
+  float epsilon = deltax*(3.00f/2.00f);
+  int steps = Steps(self->delegate);
+  int gSize = (int)powf(steps,self->space);
+  float vol = 0.0f;
+  register int i,flag;
+  float *x = malloc(sizeof(float)*self->space);
+  int *index = calloc(1,sizeof(int)*self->space);
+
+  assert(x);
+  assert(index);
+
+
+  for(i = 0; i < gSize; i++){
+      x = ((pointM)self->point)(self->delegate,index,x);
+      vol += (1-heaviSide((impSurf->level)-(impSurf->u)(self,x),epsilon));
+
+      for(flag = 0; flag < self->space; flag++)
+            if(index[flag] == steps-1)
+              index[flag] = 0;
+            else{
+              ++index[flag];
+              break;}
+    }
+
+  free(x);
+  free(index);
+
+  return vol*powf(deltax,self->space);
+}
+
 
 static void
 *SurfaceClass_ctor(void *_self, va_list *app){
@@ -71,6 +115,46 @@ static void
   return self;
 }
 
+float
+surface(const void *_self,const  float *x){
+  struct __SurfaceClass *self = cast(SurfaceClass,classOf(_self));
+
+  assert((levelSet)surface == surface);
+  assert(self->surface.method);
+
+  return ((levelSet)self->surface.method)(_self,x);
+}
+
+float
+volume(const void *_self, const void *implicitSurf){
+  struct __SurfaceClass *self = cast(SurfaceClass,classOf(_self));
+
+  assert((volM)volume == volume);
+  assert(self->volume.method);
+
+  return ((volM)self->volume.method)(_self,implicitSurf);
+}
+
+float
+volError(const void *_self, const float vol, const float level){
+  struct __SurfaceClass *self = cast(SurfaceClass,classOf(_self));
+
+  assert((volerrM) volError == volError);
+  assert(self->volError.method);
+
+  return ((volerrM)self->volError.method)(_self,vol,level);
+}
+
+float
+heaviSide(float x, float epsilon){
+  if(x < -epsilon)
+    return 0.00f;
+  else if(x >= -epsilon && x <= epsilon)
+    return 0.50f + x/(2.00f*epsilon) + (1.00f/(2.00f*PI))*sin((PI*x)/epsilon);
+  else
+    return 1.00f;
+}
+
 const void *_SurfaceClass;
 const void *_Surface;
 
@@ -86,5 +170,6 @@ __surface(){
   return new(SurfaceClass,"Surface",Object,sizeof(struct __Surface),
              ctor,"",Surface_ctor,
              dtor,"",Surface_dtor,
+             volume,"volume",Surface_volume,
              (void*)0);
 }

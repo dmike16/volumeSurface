@@ -5,7 +5,6 @@
 
 struct __SurfaceSphere{
   struct __Surface _;
-  int space;
   float radius;
 };
 
