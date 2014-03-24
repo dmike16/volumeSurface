@@ -12,6 +12,7 @@ typedef void * (*ctoR) (void*,va_list*);
 typedef struct __Object * (*neW) (const void*,va_list*);
 typedef void * (*dtoR) (void*);
 typedef int (*putO)(const void*,FILE*);
+typedef void (*reclM)(const void*,Method);
 
 struct __Object {
        unsigned long magic;
@@ -34,6 +35,7 @@ struct __Class {
        struct Method puto;
        struct Method delete;
        struct Method new;
+       struct Method reclaim;
 };
 
 void *ctor(void* self, va_list *app);
@@ -44,7 +46,8 @@ size_t sizeOf (const void *self);
 void *super_ctor(const void *class, void *self, va_list *app);
 void *super_dtor(const void *class, void *self);
 void *super_new(const void *class, const void *self, va_list *app);
-void *super_delete(const void *class, void *self);
+void super_delete(const void *class, void *self);
+void super_reclaim(const void *class, const void *self, Method how);
 int super_puto(const void *class,const void *self, FILE *fp);
 int isA (const void *self, const struct __Class *class);
 int isOf (const void *self, const struct __Class *class);

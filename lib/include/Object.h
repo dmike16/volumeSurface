@@ -14,6 +14,7 @@ extern const void *_Object;
 struct __Object *new (const void *class,...);
 void *allocate(const void *self);
 void delete (void *self);
+void reclaim(const void *self, Method how);
 int puto (const void *self,FILE *fp);
 const void* __object();
 const void* __class();
