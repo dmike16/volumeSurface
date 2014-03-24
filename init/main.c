@@ -8,9 +8,9 @@
 
 int main(void)
 {
-#ifdef MEMTRACE
+//#ifdef MEMTRACE
   mtrace();
-#endif
+//#endif
   // This main is only for test i'll change it
   float **omega = malloc(sizeof(float*)*3);
   int i;

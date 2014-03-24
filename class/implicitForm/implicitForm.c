@@ -42,6 +42,7 @@ uSurface(const void *_self, const float *x){
     return self->u(self->delegate,x);
   else {
       fprintf(stderr,"Error in find delegate implicit fuction definition: %s\n",strerror(errno));
+      reclaim(self,delete);
       exit(1);
     }
 }

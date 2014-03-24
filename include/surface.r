@@ -1,12 +1,12 @@
 #ifndef SURFACE_R
 #define SURFACE_R
 
-#include "Object.r"
+#include "node.r"
 
 typedef float * (*pointM) (const void*,const int*,float*);
 
 struct __Surface {
-  struct __Object _;
+  struct __Node _;
   struct __Object *delegate;
   int space;
   pointM point;

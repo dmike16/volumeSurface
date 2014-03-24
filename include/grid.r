@@ -1,10 +1,10 @@
 #ifndef GRID_R
 #define GRID_R
 
-#include "Object.r"
+#include "node.r"
 
 struct __Grid {
-  struct __Object _;
+  struct __Node _;
   int dim;
   int steps;
   float *delatax;
