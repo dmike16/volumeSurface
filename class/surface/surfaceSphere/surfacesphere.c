@@ -45,7 +45,7 @@ static float
 SurfaceSphere_volError(const void* _self, const float vol, const float level){
   struct __SurfaceSphere *self = cast(SurfaceSphere,_self);
 
-  float r_zero = sqrt((self->radius) - level);
+  float r_zero = sqrt((self->radius)*(self->radius) - level);
   float vol_exact = (4.00f/3.00f)*PI*powf(r_zero,Dim(self));
 
   return fabs(vol_exact - vol);

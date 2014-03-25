@@ -28,7 +28,7 @@ int main(void)
   delete(surf_toro);
   void *surf_s = new(ImplicitForm,
                      new(SurfaceSphere,
-                       new(Grid,3,100,omega),3,1.0f),0.5f);
+                       new(Grid,3,100,omega),3,3.0f),5.0f);
 
   vol = uVol(surf_s);
   printf("vol(S) = %.4f\n",vol);
