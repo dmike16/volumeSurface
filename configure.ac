@@ -3,6 +3,7 @@
 
 AC_PREREQ([2.69])
 AC_INIT([volumeSurface], [1.0], [cipmiky@gmail.com])
+AC_CANONICAL_BUILD
 AM_SILENT_RULES([yes])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AM_PROG_AR
